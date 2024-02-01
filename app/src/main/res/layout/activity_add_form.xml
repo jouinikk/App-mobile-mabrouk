@@ -1,0 +1,63 @@
+<!-- edit_dialog.xml -->
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <EditText
+        android:id="@+id/editTextNom"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Nom" />
+
+    <EditText
+        android:id="@+id/editTextEmail"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Email" />
+
+    <EditText
+        android:id="@+id/editTextTel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Tel" />
+    <EditText
+        android:id="@+id/editTextpws"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="password" />
+
+    <EditText
+        android:id="@+id/editTextCommercialAffecte"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Commercial"
+        android:visibility="gone" />
+
+    <EditText
+        android:id="@+id/editTextClientAffecte"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Client"
+        android:visibility="gone" />
+
+
+
+    <!-- edit_dialog.xml -->
+    <Spinner
+        android:id="@+id/spinnerRole"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:entries="@array/roles"
+        />
+
+    <Button
+        android:id="@+id/button2"
+        android:layout_width="401dp"
+        android:layout_height="65dp"
+        android:text="Ajouter" />
+
+
+</LinearLayout>

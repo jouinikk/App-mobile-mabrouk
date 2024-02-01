@@ -1,7 +1,8 @@
 package com.example.gestiondecommerce;
 
-public class User {
+import java.io.Serializable;
 
+public class User implements Serializable {
 
     private String Id;
     private  String email ;
@@ -12,8 +13,27 @@ public class User {
     private String commercialAffectee;
     private String clientAffectee;
 
+
+
+    public User(String email, String name, String role, int tel) {
+        this.email = email;
+        this.name = name;
+        this.role = role;
+        this.tel = tel;
+    }
+
+    public User(String nom, String email, int tel, String password, String selectedRole, String commercialAffecte, String clientAffecte) {
+        this.email = email;
+        this.password = password;
+        this.name = nom;
+        this.role = selectedRole;
+        this.tel = tel;
+        this.commercialAffectee = commercialAffecte;
+        this.clientAffectee=clientAffecte;
+    }
+
     public String getCommercialAffectee() {
-        return commercialAffectee;
+        return this.commercialAffectee;
     }
 
     public void setCommercialAffectee(String commercialAffectee) {
@@ -21,8 +41,9 @@ public class User {
     }
 
     public String getClientAffectee() {
-        return clientAffectee;
+        return this.clientAffectee;
     }
+
 
     public void setClientAffectee(String clientAffectee) {
         this.clientAffectee = clientAffectee;
