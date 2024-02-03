@@ -219,4 +219,3 @@ public class detailsUser extends AppCompatActivity {
 }
 
 
-

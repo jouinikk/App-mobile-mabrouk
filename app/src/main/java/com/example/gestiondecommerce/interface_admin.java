@@ -47,7 +47,6 @@ public class interface_admin extends AppCompatActivity {
     private Button btnDatePicker;
     private Calendar selectedDate;
     private String date;
-
     Button chercher;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -59,7 +58,6 @@ public class interface_admin extends AppCompatActivity {
         btnDatePicker = findViewById(R.id.btnDatePicker);
         btnDatePicker.setOnClickListener(view -> showDatePickerDialog());
 
-
         getUsers(users -> {
             ArrayAdapter<User> adapter = new ArrayAdapter<>(interface_admin.this, android.R.layout.simple_spinner_item,users);
             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -67,7 +65,6 @@ public class interface_admin extends AppCompatActivity {
         });
 
         recyclerView = findViewById(R.id.rv);
-
 
         Button btn = findViewById(R.id.button);
         btn.setOnClickListener(view -> updateValidationCAdmin());

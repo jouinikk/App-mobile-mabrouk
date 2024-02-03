@@ -15,6 +15,20 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.GestionDeCommerce"
         tools:targetApi="31">
+        <activity android:name=".CommercialActivity"
+            android:exported="false" />
+        <activity
+            android:name=".add_form"
+            android:exported="false" />
+        <activity
+            android:name=".detailsUser"
+            android:exported="false" />
+        <activity
+            android:name=".SuperUser"
+            android:exported="false" />
+        <activity
+            android:name=".ClientsListe"
+            android:exported="false" />
         <activity
             android:name=".add_form"
             android:exported="false" />
@@ -38,9 +52,6 @@
             android:exported="false" />
         <activity
             android:name=".MvtListActivity"
-            android:exported="false" />
-        <activity
-            android:name=".iteam_comercial"
             android:exported="false" />
         <activity
             android:name=".interface_client"

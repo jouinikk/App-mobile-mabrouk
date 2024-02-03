@@ -53,10 +53,10 @@ public class SuperUser extends AppCompatActivity {
             startActivity(intent);
         });
         Button btn1=findViewById(R.id.button4);
-                btn1.setOnClickListener(view -> {
-                    Intent i = new Intent(SuperUser.this,add_form.class);
-                    startActivity(i);
-                });
+        btn1.setOnClickListener(view -> {
+            Intent i = new Intent(SuperUser.this,add_form.class);
+            startActivity(i);
+        });
     }
 
     private void fetchDataFromFirestore() {

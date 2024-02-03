@@ -69,6 +69,7 @@ public class CommercialListAdapter extends ArrayAdapter<MVT> {
                     public void onSuccess(Void unused) {
                         progressDialog.dismiss();
                         Toast.makeText(context, "Succes", Toast.LENGTH_SHORT).show();
+                        notifyDataSetChanged();
                     }
                 });
     }

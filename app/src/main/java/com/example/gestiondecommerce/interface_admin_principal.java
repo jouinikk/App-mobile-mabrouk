@@ -24,7 +24,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class interface_admin_principal extends AppCompatActivity {
-    private FirebaseFirestore firestore; // Déclaration de firestore
+    private FirebaseFirestore firestore;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,10 +35,11 @@ public class interface_admin_principal extends AppCompatActivity {
         firestore = FirebaseFirestore.getInstance();
 
         btn1.setOnClickListener(view -> {
-            Intent intent = new Intent(this, interface_admin.class);
+            Intent intent = new Intent(this, journal.class);
             startActivity(intent);
             finish();
         });
+
         btn2.setOnClickListener(view -> {
             Intent intent = new Intent(this, Sign_up.class);
             startActivity(intent);
@@ -48,8 +49,21 @@ public class interface_admin_principal extends AppCompatActivity {
         Button btnShowUsers = findViewById(R.id.btnShowUsers);
         btnShowUsers.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
-                showPopupMenu(view);
+            public void onClick(View v) {
+                Intent intent = new Intent(interface_admin_principal.this, ClientsListe.class);
+                intent.putExtra("from", "client");
+                startActivity(intent);
+                finish();
+            }
+        });
+        Button showCommercials = findViewById(R.id.showCommercials);
+        showCommercials.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(interface_admin_principal.this, ClientsListe.class);
+                intent.putExtra("from", "commercial");
+                startActivity(intent);
+                finish();
             }
         });
 
@@ -57,63 +71,10 @@ public class interface_admin_principal extends AppCompatActivity {
         quit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(interface_admin_principal.this,MainActivity.class);
+                Intent i = new Intent(interface_admin_principal.this, MainActivity.class);
                 startActivity(i);
             }
         });
     }
 
-    private void showPopupMenu(View view) {
-        PopupMenu popupMenu = new PopupMenu(this, view);
-        MenuInflater inflater = popupMenu.getMenuInflater();
-        inflater.inflate(R.menu.menu, popupMenu.getMenu());
-
-        popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(MenuItem item) {
-                if (item.getItemId() == R.id.menu_show_users) {
-                    showAllUsers();
-                    return true;
-                }
-                return false;
-            }
-        });
-
-        popupMenu.show();
-    }
-
-    private void showAllUsers() {
-        firestore.collection("User")
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()) {
-                            List<User> userList = new ArrayList<>();
-                            for (QueryDocumentSnapshot document : task.getResult()) {
-                                User user = document.toObject(User.class);
-                                userList.add(user);
-                            }
-
-                            // Afficher le menu contextuel avec les noms des utilisateurs
-                            showUsersContextMenu(userList);
-                        } else {
-                            Toast.makeText(interface_admin_principal.this, "Erreur lors de la récupération des utilisateurs.", Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                });
-    }
-
-
-
-    private void showUsersContextMenu(List<User> userList) {
-        PopupMenu userMenu = new PopupMenu(this, findViewById(R.id.btnShowUsers));
-        Menu menu = userMenu.getMenu();
-
-        for (User user : userList) {
-            menu.add(user.getName() + " - " + user.getRole());
-        }
-
-        userMenu.show();
-    }
 }

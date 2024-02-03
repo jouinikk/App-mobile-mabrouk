@@ -1,5 +1,6 @@
 package com.example.gestiondecommerce;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -10,8 +11,12 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
+
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -28,6 +33,7 @@ public class interface_commercial1 extends AppCompatActivity {
     Date currentDate = new Date();
     SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
     String formattedDate = dateFormat.format(currentDate).substring(0, 10);
+    Intent intent = getIntent();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,13 +60,15 @@ public class interface_commercial1 extends AppCompatActivity {
             public void onClick(View v) {
                 Intent i = new Intent(interface_commercial1.this, MainActivity.class);
                 startActivity(i);
-
             }
         });
     }
 
     public void loadDataFromFirestore(CallBack callBack) {
-        mvtCollection.whereEqualTo("validation_commercial", false)
+        mvtCollection
+                .whereEqualTo("validation_commercial", false)
+                .whereEqualTo("date", formattedDate)
+                .whereEqualTo("clientAffectee", intent.getStringExtra("client"))
                 .get()
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
@@ -75,4 +83,5 @@ public class interface_commercial1 extends AppCompatActivity {
                     }
                 });
     }
+
 }

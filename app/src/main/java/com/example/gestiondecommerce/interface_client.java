@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -76,7 +77,8 @@ public class interface_client extends AppCompatActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_interface_client);
         intent=getIntent();
-        commercial = intent.getStringExtra("commercial");
+        SharedPreferences preferences = getSharedPreferences("user", MODE_PRIVATE);
+        commercial = preferences.getString("commercial", "");
         montantInput = findViewById(R.id.montantInput);
         submitBtn = findViewById(R.id.submitBtn);
         db = FirebaseFirestore.getInstance();
@@ -107,10 +109,9 @@ public class interface_client extends AppCompatActivity{
                 Toast.makeText(interface_client.this, "Montant Vide", Toast.LENGTH_SHORT).show();
             } else {
                 mvt.setMontant(Integer.parseInt(montantInput.getText().toString()));
-                User selectedUser = new User();
-                mvt.setCommercial(intent.getStringExtra("commercial"));
-                mvt.setIdClient(intent.getStringExtra("id"));
-                mvt.setNomClient(intent.getStringExtra("nom"));
+                mvt.setCommercial(commercial);
+                mvt.setIdClient(preferences.getString("id", ""));
+                mvt.setNomClient(preferences.getString("nom", ""));
 
                 DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
                 LocalDate currentDate = LocalDate.now();
@@ -134,7 +135,7 @@ public class interface_client extends AppCompatActivity{
         Button showMVTsBtn = findViewById(R.id.showMVTsBtn);
         showMVTsBtn.setOnClickListener(view -> {
             Intent i = new Intent(interface_client.this,MvtListActivity.class);
-            i.putExtra("id", intent.getStringExtra("id"));
+            i.putExtra("id", preferences.getString("id", ""));
             startActivity(i);
         });
 
@@ -142,6 +143,9 @@ public class interface_client extends AppCompatActivity{
         quit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                SharedPreferences.Editor editor= preferences.edit();
+                editor.clear();
+                editor.apply();
                 Intent intent = new Intent(interface_client.this, MainActivity.class);
                 startActivity(intent);
                 finish();

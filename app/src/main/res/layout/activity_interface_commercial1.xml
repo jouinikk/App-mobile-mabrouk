@@ -21,8 +21,8 @@
 
     <TextView
         android:id="@+id/vide"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="30dp"
+        android:layout_height="14dp"
         android:text="Tous montants sont validées!"
         android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"

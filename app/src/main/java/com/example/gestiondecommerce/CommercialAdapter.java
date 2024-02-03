@@ -76,7 +76,6 @@ public class CommercialAdapter extends RecyclerView.Adapter<CommercialAdapter.co
         TextView client;
         TextView montant;
         TextView date;
-
         TextView tel;
         TextView valCom;
         TextView valAdm;
@@ -92,10 +91,8 @@ public class CommercialAdapter extends RecyclerView.Adapter<CommercialAdapter.co
             valCom = itemView.findViewById(R.id.valCom);
             tel=itemView.findViewById(R.id.tel);
 
-
             imageViewValidation = itemView.findViewById(R.id.imageViewValidation);
             imageViewValidation1= itemView.findViewById(R.id.imageViewValidation1);
-
 
             itemView.setOnClickListener(view -> {
                 if (onItemClickListener != null) {

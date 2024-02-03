@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -58,21 +59,24 @@ public class MainActivity extends AppCompatActivity {
                                             String documentPsw = document.getString("password");
                                             String documentRole = document.getString("role");
 
-                                            // Vérifier si l'e-mail, le mot de passe et le rôle correspondent
                                             if (email.equals(documentEmail) && psw.equals(documentPsw) && "client".equals(documentRole)) {
                                                 // Rediriger vers ClientActivity
                                                 Intent intent = new Intent(MainActivity.this,interface_client.class);
-                                                intent.putExtra("id", document.getId());
-                                                intent.putExtra("nom", document.getString("name"));
-                                                intent.putExtra("commercial", document.getString("commercialAffectee"));
+                                                SharedPreferences preferences = getSharedPreferences("user", MODE_PRIVATE);
+                                                SharedPreferences.Editor editor = preferences.edit();
+                                                editor.putString("id", document.getId());
+                                                editor.putString("nom", document.getString("name"));
+                                                editor.putString("commercial", document.getString("commercialAffectee"));
+                                                editor.apply();
                                                 startActivity(intent);
                                                 finish();  // Optionnel : fermer cette activité pour éviter le retour en arrière
                                                 return;
                                             }
                                             else
                                             if (email.equals(documentEmail) && psw.equals(documentPsw) && "commercial".equals(documentRole)) {
-                                                // Rediriger vers ClientActivity
-                                                Intent intent = new Intent(MainActivity.this, interface_commercial1.class);
+                                                Intent intent = new Intent(MainActivity.this, CommercialActivity.class);
+                                                intent.putExtra("client", document.getString("clientAffectee"));
+                                                intent.putExtra("commercial", document.getString("name"));
                                                 startActivity(intent);
                                                 finish();  // Optionnel : fermer cette activité pour éviter le retour en arrière
                                                 return;
@@ -84,16 +88,24 @@ public class MainActivity extends AppCompatActivity {
                                                 startActivity(intent);
                                                 finish();  // Optionnel : fermer cette activité pour éviter le retour en arrière
                                                 return;
-
-                                        }  else
+                                            } else
                                             if (email.equals(documentEmail) && psw.equals(documentPsw) && "superUser".equals(documentRole)) {
                                                 // Rediriger vers ClientActivity
                                                 Intent intent = new Intent(MainActivity.this, SuperUser.class);
                                                 startActivity(intent);
                                                 finish();  // Optionnel : fermer cette activité pour éviter le retour en arrière
                                                 return;
-                                            }
+                                            } else
+                                            if (email.equals(documentEmail) && psw.equals(documentPsw) && "superUser".equals(documentRole)) {
+                                                // Rediriger vers ClientActivity
+                                                Intent intent = new Intent(MainActivity.this, SuperUser.class);
+                                                startActivity(intent);
+                                                finish();  // Optionnel : fermer cette activité pour éviter le retour en arrière
+                                                return;
+
                                         }
+                                        }
+
 
                                         Toast.makeText(MainActivity.this, "Aucun utilisateur correspondant trouvé", Toast.LENGTH_SHORT).show();
 

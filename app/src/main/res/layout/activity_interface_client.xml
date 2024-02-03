@@ -28,18 +28,12 @@
         android:layout_marginTop="180dp"
         android:hint="Montant" />
 
-    <Spinner
-        android:id="@+id/commercialesSpinner"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/montantInput"
-        android:layout_marginTop="16dp" />
 
     <Button
         android:id="@+id/submitBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/commercialesSpinner"
+        android:layout_below="@id/montantInput"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="32dp"
         android:text="Ajouter" />
