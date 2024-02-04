@@ -55,10 +55,10 @@ public class add_form extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
                 String selectedRole = parentView.getItemAtPosition(position).toString();
-                if ("Commercial".equals(selectedRole)) {
+                if ("commercial".equals(selectedRole)) {
                     commercialAffecteEditText.setVisibility(View.GONE);
                     clientAffecteEditText.setVisibility(View.VISIBLE);
-                } else if ("Client".equals(selectedRole)) {
+                } else if ("client".equals(selectedRole)) {
                     commercialAffecteEditText.setVisibility(View.VISIBLE);
                     clientAffecteEditText.setVisibility(View.GONE);
                 }

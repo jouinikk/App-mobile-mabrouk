@@ -95,20 +95,9 @@ public class MainActivity extends AppCompatActivity {
                                                 startActivity(intent);
                                                 finish();  // Optionnel : fermer cette activité pour éviter le retour en arrière
                                                 return;
-                                            } else
-                                            if (email.equals(documentEmail) && psw.equals(documentPsw) && "superUser".equals(documentRole)) {
-                                                // Rediriger vers ClientActivity
-                                                Intent intent = new Intent(MainActivity.this, SuperUser.class);
-                                                startActivity(intent);
-                                                finish();  // Optionnel : fermer cette activité pour éviter le retour en arrière
-                                                return;
-
+                                            }
                                         }
-                                        }
-
-
                                         Toast.makeText(MainActivity.this, "Aucun utilisateur correspondant trouvé", Toast.LENGTH_SHORT).show();
-
                                     } else {
                                         Log.w(TAG, "Erreur d'authentification!.", task.getException());
                                     }

@@ -109,11 +109,11 @@ public class detailsUser extends AppCompatActivity {
         int position = adapter.getPosition(currentUser.getRole());
         spinnerRole.setSelection(position);
 
-        if ("Commercial".equalsIgnoreCase(currentUser.getRole())) {
+        if ("commercial".equalsIgnoreCase(currentUser.getRole())) {
             editTextCommercialAffecte.setVisibility(View.GONE);
             editTextCommercialAffecte.setText(currentUser.getCommercialAffectee());
             editTextClientAffecte.setVisibility(View.VISIBLE);
-        } else if ("Client".equalsIgnoreCase(currentUser.getRole())) {
+        } else if ("client".equalsIgnoreCase(currentUser.getRole())) {
             editTextCommercialAffecte.setVisibility(View.VISIBLE);
             editTextClientAffecte.setVisibility(View.GONE);
             editTextClientAffecte.setText(currentUser.getClientAffectee());
@@ -160,11 +160,11 @@ public class detailsUser extends AppCompatActivity {
         updatedData.put("password", newPWS);
         updatedData.put("role", newRole);
 
-        if ("Commercial".equalsIgnoreCase(newRole)) {
+        if ("commercial".equalsIgnoreCase(newRole)) {
             Log.d("UpdateUserDetails", "New Commercial Affecte: " + newCommercialAffecte);
             updatedData.put("commercialAffectee", newCommercialAffecte);
             updatedData.put("clientAffectee", "");
-        } else if ("Client".equalsIgnoreCase(newRole)) {
+        } else if ("client".equalsIgnoreCase(newRole)) {
             Log.d("UpdateUserDetails", "New Client Affecte: " + newClientAffecte);
             updatedData.put("clientAffectee", newClientAffecte);
             updatedData.put("commercialAffectee", "");
@@ -217,5 +217,3 @@ public class detailsUser extends AppCompatActivity {
                 });
     }
 }
-
-

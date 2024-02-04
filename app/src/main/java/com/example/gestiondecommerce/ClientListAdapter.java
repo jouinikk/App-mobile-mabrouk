@@ -1,6 +1,7 @@
 package com.example.gestiondecommerce;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -50,7 +51,11 @@ public class ClientListAdapter extends RecyclerView.Adapter<ClientListAdapter.Cl
     public void onBindViewHolder(@NonNull ClientDetailsVH holder, int position) {
         User user = users.get(position);
         holder.nc.setText(user.getName());
-        getUsers(new UsersCallback() {
+        String role="client";
+        if (from.equals(role)){
+            role = "commercial";
+        }
+        getUsers(role,new UsersCallback() {
             @Override
             public void onCallback(List<User> users) {
                 ArrayAdapter<User> userArrayAdapter = new ArrayAdapter<>(context, android.R.layout.simple_spinner_item, users);
@@ -63,7 +68,7 @@ public class ClientListAdapter extends RecyclerView.Adapter<ClientListAdapter.Cl
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 User selected = (User) holder.sp.getSelectedItem();
-                updateUser(user.getId(), selected.getName());
+                updateUser(user.getRole(), user.getId(), selected.getName());
             }
 
             @Override
@@ -74,12 +79,12 @@ public class ClientListAdapter extends RecyclerView.Adapter<ClientListAdapter.Cl
 
     }
 
-    private void updateUser(String user, String selected) {
-        Task<Void> task;
-        DocumentReference document = db.collection("User").document(user);
-        if (from.equals("client")) task = document.update("commercialAffectee", selected);
-        else task = document.update("clientAffectee", selected);
-        task.addOnSuccessListener(new OnSuccessListener<Void>() {
+    private void updateUser(String role,String user, String selected) {
+        String affectee = "commercialAffectee";
+        if(role.equals("commercial")) affectee = "clientAffectee";
+        db.collection("User").document(user)
+        .update(affectee, selected)
+        .addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void unused) {
                 Toast.makeText(context, "Commercial affectée", Toast.LENGTH_SHORT).show();
@@ -104,13 +109,10 @@ public class ClientListAdapter extends RecyclerView.Adapter<ClientListAdapter.Cl
     }
 
 
-    public void getUsers(UsersCallback callback) {
-        Query query;
-        CollectionReference collection = db.collection("User");
-        if (from.equals("client"))
-            query = collection.whereEqualTo("role", Arrays.asList("commercial", "Commercial"));
-        else query = collection.whereEqualTo("role", Arrays.asList("client", "Client"));
-        query.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+    public void getUsers(String role,UsersCallback callback) {
+         db.collection("User")
+         .whereEqualTo("role",role)
+        .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 List<User> usersList = new ArrayList<>();
@@ -121,7 +123,6 @@ public class ClientListAdapter extends RecyclerView.Adapter<ClientListAdapter.Cl
                         usersList.add(user);
                     }
                 }
-                Toast.makeText(context, String.valueOf(usersList.size()), Toast.LENGTH_SHORT).show();
                 callback.onCallback(usersList);
             }
         });

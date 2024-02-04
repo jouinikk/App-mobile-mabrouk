@@ -30,24 +30,6 @@
             android:name=".ClientsListe"
             android:exported="false" />
         <activity
-            android:name=".add_form"
-            android:exported="false" />
-        <activity
-            android:name=".detailsUser"
-            android:exported="false" />
-        <activity
-            android:name=".SuperUser"
-            android:exported="false" />
-        <activity
-            android:name=".add_form"
-            android:exported="false" />
-        <activity
-            android:name=".detailsUser"
-            android:exported="false" />
-        <activity
-            android:name=".SuperUser"
-            android:exported="false" />
-        <activity
             android:name=".journal"
             android:exported="false" />
         <activity

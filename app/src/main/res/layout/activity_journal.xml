@@ -23,14 +23,13 @@
         android:layout_height="456dp"
         android:layout_marginTop="100dp"
         android:visibility="visible"
-        app:layout_constraintBottom_toTopOf="@+id/button"
+        app:layout_constraintBottom_toTopOf="@id/textView4"
         app:layout_constraintDimensionRatio="3:4"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView4"
         app:layout_constraintVertical_bias="0.5" />
-
     <Button
         android:id="@+id/valide"
         android:layout_width="0dp"
@@ -41,7 +40,6 @@
         app:layout_constraintEnd_toStartOf="@+id/quite"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/rv" />
-
     <Button
         android:id="@+id/quite"
         android:layout_width="0dp"
@@ -50,8 +48,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/valide"
         app:layout_constraintTop_toBottomOf="@+id/textView9" />
-
-
     <TextView
         android:id="@+id/textView9"
         android:layout_width="wrap_content"

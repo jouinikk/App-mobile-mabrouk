@@ -69,8 +69,8 @@ public class Sign_up extends AppCompatActivity {
         spinnerRole.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                if (spinnerRole.getSelectedItem().toString().equals("Client")){
-                    getUsers("Commercial", new UsersCallback() {
+                if (spinnerRole.getSelectedItem().toString().equals("client")){
+                    getUsers("commercial", new UsersCallback() {
                         @Override
                         public void onCallback(List<User> users) {
                             ArrayAdapter<User> userAdapter = new ArrayAdapter<>(Sign_up.this, android.R.layout.simple_spinner_item,users);
@@ -80,8 +80,8 @@ public class Sign_up extends AppCompatActivity {
                         }
                     });
 
-                } else if (spinnerRole.getSelectedItem().toString().equals("Commercial")) {
-                    getUsers("Client", new UsersCallback() {
+                } else if (spinnerRole.getSelectedItem().toString().equals("commercial")) {
+                    getUsers("client", new UsersCallback() {
                         @Override
                         public void onCallback(List<User> users) {
                             ArrayAdapter<User> userAdapter = new ArrayAdapter<>(Sign_up.this, android.R.layout.simple_spinner_item,users);
@@ -179,10 +179,10 @@ public class Sign_up extends AppCompatActivity {
         user.setName(name);
         user.setTel(tel);
         user.setRole(role);
-        if(role.equals("Client")){
+        if(role.equals("client")){
             User com =(User)spinnerUser.getSelectedItem();
             user.setCommercialAffectee(com.getName());
-        } else if (role.equals("Commercial")){
+        } else if (role.equals("commercial")){
             User cli =(User)spinnerUser.getSelectedItem();
             user.setCommercialAffectee(cli.getName());
         }
