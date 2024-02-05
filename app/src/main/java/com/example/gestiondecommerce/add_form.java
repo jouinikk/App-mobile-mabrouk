@@ -1,7 +1,8 @@
 package com.example.gestiondecommerce;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-
+import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
@@ -11,39 +12,36 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
-
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
-
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
+import java.util.ArrayList;
+import java.util.List;
 public class add_form extends AppCompatActivity {
     private Spinner roleSpinner;
-    private EditText commercialAffecteEditText;
-    private EditText clientAffecteEditText;
+    private Spinner usersSpinner;
     private EditText editTextNom;
     private EditText editTextEmail;
     private EditText editTextTel;
     private EditText editTextpws;
     private Button addButton;
-
     private FirebaseFirestore db;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_form);
-
         db = FirebaseFirestore.getInstance();
-
         roleSpinner = findViewById(R.id.spinnerRole);
-        commercialAffecteEditText = findViewById(R.id.editTextCommercialAffecte);
-        clientAffecteEditText = findViewById(R.id.editTextClientAffecte);
+        usersSpinner = findViewById(R.id.spinnerUser);
         editTextNom = findViewById(R.id.editTextNom);
         editTextEmail = findViewById(R.id.editTextEmail);
         editTextTel = findViewById(R.id.editTextTel);
         editTextpws = findViewById(R.id.editTextpws);
         addButton = findViewById(R.id.button2);
-
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(
                 this,
                 R.array.roles,
@@ -51,66 +49,82 @@ public class add_form extends AppCompatActivity {
         );
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         roleSpinner.setAdapter(adapter);
-
         roleSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
                 String selectedRole = parentView.getItemAtPosition(position).toString();
                 if ("commercial".equals(selectedRole)) {
-                    commercialAffecteEditText.setVisibility(View.GONE);
-                    clientAffecteEditText.setVisibility(View.VISIBLE);
+                   getUsers("client", new UsersCallback() {
+                       @Override
+                       public void onCallback(List<User> users) {
+                           ArrayAdapter<User> userAdapter = new ArrayAdapter<>(add_form.this, android.R.layout.simple_spinner_item,users);
+                           userAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                           usersSpinner.setAdapter(userAdapter);
+                           usersSpinner.setVisibility(View.VISIBLE);                       }
+                   });
                 } else if ("client".equals(selectedRole)) {
-                    commercialAffecteEditText.setVisibility(View.VISIBLE);
-                    clientAffecteEditText.setVisibility(View.GONE);
+                    getUsers("commercial", new UsersCallback() {
+                        @Override
+                        public void onCallback(List<User> users) {
+                            ArrayAdapter<User> userAdapter = new ArrayAdapter<>(add_form.this, android.R.layout.simple_spinner_item,users);
+                            userAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                            usersSpinner.setAdapter(userAdapter);
+                            usersSpinner.setVisibility(View.VISIBLE);
+                        }
+                    });
                 }
                 else {
-                    commercialAffecteEditText.setVisibility(View.GONE);
-                    clientAffecteEditText.setVisibility(View.GONE);
+                    usersSpinner.setVisibility(View.GONE);
                 }
             }
-
             @Override
             public void onNothingSelected(AdapterView<?> parentView) {
-                // Ne rien faire ici, si nécessaire
             }
         });
-
         addButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 String nom = editTextNom.getText().toString();
-                // Vérifiez si le nom est non nul ou vide avant d'ajouter l'utilisateur à Firebase
                 if (nom.isEmpty()) {
                     Toast.makeText(add_form.this, "Veuillez saisir un nom", Toast.LENGTH_SHORT).show();
-                    return;  // Arrêtez l'exécution de la méthode si le nom est vide
+                    return;
                 }
-
                 String email = editTextEmail.getText().toString();
                 int tel = Integer.parseInt(editTextTel.getText().toString());
                 String password = editTextpws.getText().toString();
-                String commercialAffecte = commercialAffecteEditText.getText().toString();
-                String clientAffecte = clientAffecteEditText.getText().toString();
                 String selectedRole = roleSpinner.getSelectedItem().toString();
 
-                User newUser = new User(nom, email, tel, password, selectedRole, commercialAffecte, clientAffecte);
+                User newUser = new User();
 
-                FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+                newUser.setName(nom);
+                newUser.setEmail(email);
+                newUser.setTel(tel);
+                newUser.setPassword(password);
+                newUser.setRole(selectedRole);
 
-                db.collection("User").document(currentUser.getUid()).set(newUser);
+                User user =(User) usersSpinner.getSelectedItem();
 
+                if (selectedRole.equals("client")){
+                    newUser.setCommercialAffectee(user.getName());
+                }else if(selectedRole.equals("commercial")){
+                    newUser.setClientAffectee(user.getName());
+                }
+                db.collection("User").add(newUser)
+                        .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                            @Override
+                            public void onSuccess(DocumentReference documentReference) {
+                                Toast.makeText(add_form.this,"Utilisateur ajoutée avec succée", Toast.LENGTH_SHORT).show();
+                            }
+                        })
+                ;
                 finish();
             }
         });
-
         androidx.appcompat.widget.Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
         getSupportActionBar().setTitle("Historique");
-
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
     }
-
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
@@ -120,5 +134,28 @@ public class add_form extends AppCompatActivity {
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    public void getUsers(String role,UsersCallback callback){
+        List<User> users = new ArrayList<>();
+        ProgressDialog pd = new ProgressDialog(this);
+        pd.setMessage("getting data...");
+        pd.show();
+         db.collection("User")
+                 .whereEqualTo("role",role)
+                 .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                     @Override
+                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                         if(task.isSuccessful()){
+                             for(QueryDocumentSnapshot document:task.getResult()){
+                                 User user = document.toObject(User.class);
+                                 user.setId(document.getId());
+                                 users.add(user);
+                             }
+                            callback.onCallback(users);
+                         }
+                         pd.dismiss();
+                     }
+                 });
     }
 }

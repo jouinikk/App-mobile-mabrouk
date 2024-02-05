@@ -149,7 +149,7 @@ public class interface_client extends AppCompatActivity{
                 editor.apply();
                 Intent intent = new Intent(interface_client.this, MainActivity.class);
                 startActivity(intent);
-                finish();
+
             }
         });
 

@@ -1,5 +1,6 @@
 package com.example.gestiondecommerce;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -16,15 +17,21 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class detailsUser extends AppCompatActivity {
     private User currentUser;
-
+    FirebaseFirestore db = FirebaseFirestore.getInstance();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -113,8 +120,7 @@ public class detailsUser extends AppCompatActivity {
         final EditText editTel = view.findViewById(R.id.editTextTel);
         final EditText editPws = view.findViewById(R.id.editTextpws);
         final Spinner spinnerRole = view.findViewById(R.id.spinnerRole);
-        final EditText editTextCommercialAffecte = view.findViewById(R.id.editTextCommercialAffecte);
-        final EditText editTextClientAffecte = view.findViewById(R.id.editTextClientAffecte);
+        final Spinner spinnerUsers= view.findViewById(R.id.spinnerUser);
 
         editName.setText(currentUser.getName());
         editEmail.setText(currentUser.getEmail());
@@ -128,19 +134,27 @@ public class detailsUser extends AppCompatActivity {
         spinnerRole.setSelection(position);
 
         if ("commercial".equalsIgnoreCase(currentUser.getRole())) {
-            editTextCommercialAffecte.setVisibility(View.GONE);
-            editTextCommercialAffecte.setText(currentUser.getCommercialAffectee());
-            editTextClientAffecte.setVisibility(View.VISIBLE);
+            getUsers("client", new UsersCallback() {
+                @Override
+                public void onCallback(List<User> users) {
+                    ArrayAdapter<User> userAdapter = new ArrayAdapter<>(detailsUser.this, android.R.layout.simple_spinner_item,users);
+                    userAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                    spinnerUsers.setAdapter(userAdapter);
+                    spinnerUsers.setVisibility(View.VISIBLE);
+                }
+            });
         } else if ("client".equalsIgnoreCase(currentUser.getRole())) {
-            editTextCommercialAffecte.setVisibility(View.VISIBLE);
-            editTextClientAffecte.setVisibility(View.GONE);
-            editTextClientAffecte.setText(currentUser.getClientAffectee());
+            getUsers("commercial", new UsersCallback() {
+                @Override
+                public void onCallback(List<User> users) {
+                    ArrayAdapter<User> userAdapter = new ArrayAdapter<>(detailsUser.this, android.R.layout.simple_spinner_item,users);
+                    userAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                    spinnerUsers.setAdapter(userAdapter);
+                    spinnerUsers.setVisibility(View.VISIBLE);
+                }
+            });
         }else {
-            editTextCommercialAffecte.setVisibility(View.GONE);
-            editTextClientAffecte.setVisibility(View.GONE);
-
-
-
+            spinnerUsers.setVisibility(View.GONE);
         }
 
         builder.setPositiveButton("Enregistrer", new DialogInterface.OnClickListener() {
@@ -151,9 +165,11 @@ public class detailsUser extends AppCompatActivity {
                 String newTel = editTel.getText().toString().trim();
                 String newPWS = editPws.getText().toString().trim();
                 String newRole = spinnerRole.getSelectedItem().toString();
-                String newCommercialAffecte = editTextCommercialAffecte.getText().toString().trim();
-                String newClientAffecte = editTextClientAffecte.getText().toString().trim();
-
+                User user = (User) spinnerUsers.getSelectedItem();
+                String newCommercialAffecte ="";
+                String newClientAffecte="";
+                if (newRole.equals("client")) newCommercialAffecte = user.getName();
+                if(newRole.equals("commercial")) newClientAffecte = user.getName();
                 updateUserDetails(newName, newEmail, newTel, newPWS, newRole, newCommercialAffecte, newClientAffecte);
             }
         });
@@ -228,10 +244,27 @@ public class detailsUser extends AppCompatActivity {
 
                     Intent intent = new Intent(detailsUser.this, SuperUser.class);
                     startActivity(intent);
-                    finish();
                 })
                 .addOnFailureListener(e -> {
                     Toast.makeText(detailsUser.this, "Failed to delete user", Toast.LENGTH_SHORT).show();
+                });
+    }
+    private void getUsers(String role,UsersCallback callback){
+        List<User> users = new ArrayList<>();
+        db.collection("User").whereEqualTo("role", role)
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if(task.isSuccessful()){
+                            for(QueryDocumentSnapshot document:task.getResult()){
+                                users.add(document.toObject(User.class));
+                            }
+                            callback.onCallback(users);
+                        }else {
+                            Toast.makeText(detailsUser.this, "liste vide",Toast.LENGTH_SHORT);
+                        }
+                    }
                 });
     }
 }

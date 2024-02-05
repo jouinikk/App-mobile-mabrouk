@@ -65,7 +65,6 @@ public class interface_commercial1 extends AppCompatActivity {
         });
         androidx.appcompat.widget.Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
         getSupportActionBar().setTitle("Historique");
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);

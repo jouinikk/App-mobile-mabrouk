@@ -66,21 +66,13 @@
         android:entries="@array/roles" />
 
     <!-- Additional Fields (Commercial and Client) -->
-    <EditText
-        android:id="@+id/editTextCommercialAffecte"
-        android:layout_width="match_parent"
+    <Spinner
+        android:id="@+id/spinnerUsers"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:hint="Commercial"
         android:layout_marginTop="20dp"
-        android:visibility="gone" />
-
-    <EditText
-        android:id="@+id/editTextClientAffecte"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Client"
-        android:layout_marginTop="20dp"
-        android:visibility="gone" />
+        android:visibility="gone"
+        />
 
     <!-- Button for Adding -->
     <Button

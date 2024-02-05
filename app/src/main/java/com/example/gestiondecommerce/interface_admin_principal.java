@@ -37,13 +37,13 @@ public class interface_admin_principal extends AppCompatActivity {
         btn1.setOnClickListener(view -> {
             Intent intent = new Intent(this, journal.class);
             startActivity(intent);
-            finish();
+
         });
 
         btn2.setOnClickListener(view -> {
             Intent intent = new Intent(this, Sign_up.class);
             startActivity(intent);
-            finish();
+
         });
 
         Button btnShowUsers = findViewById(R.id.btnShowUsers);
@@ -53,7 +53,7 @@ public class interface_admin_principal extends AppCompatActivity {
                 Intent intent = new Intent(interface_admin_principal.this, ClientsListe.class);
                 intent.putExtra("from", "client");
                 startActivity(intent);
-                finish();
+
             }
         });
         Button showCommercials = findViewById(R.id.showCommercials);
@@ -63,7 +63,7 @@ public class interface_admin_principal extends AppCompatActivity {
                 Intent intent = new Intent(interface_admin_principal.this, ClientsListe.class);
                 intent.putExtra("from", "commercial");
                 startActivity(intent);
-                finish();
+
             }
         });
 
@@ -73,6 +73,7 @@ public class interface_admin_principal extends AppCompatActivity {
             public void onClick(View v) {
                 Intent i = new Intent(interface_admin_principal.this, MainActivity.class);
                 startActivity(i);
+                finish();
             }
         });
         androidx.appcompat.widget.Toolbar toolbar = findViewById(R.id.toolbar);
