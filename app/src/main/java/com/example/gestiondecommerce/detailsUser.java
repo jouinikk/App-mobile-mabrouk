@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -50,9 +51,9 @@ public class detailsUser extends AppCompatActivity {
             txtEmail.setText("Email: " + currentUser.getEmail());
             txttel.setText("N° Tel: " + currentUser.getTel());
             txtRole.setText("Role: " + currentUser.getRole());
-            if ("Commercial".equalsIgnoreCase(currentUser.getRole())) {
+            if ("commercial".equalsIgnoreCase(currentUser.getRole())) {
                 txtAffecteé.setText("Client Affecteé : " + currentUser.getClientAffectee());
-            } else if ("Client".equalsIgnoreCase(currentUser.getRole())) {
+            } else if ("client".equalsIgnoreCase(currentUser.getRole())) {
                 txtAffecteé.setText("Commercial Affecteé : " + currentUser.getCommercialAffectee());
             }
         }
@@ -132,30 +133,40 @@ public class detailsUser extends AppCompatActivity {
         spinnerRole.setAdapter(adapter);
         int position = adapter.getPosition(currentUser.getRole());
         spinnerRole.setSelection(position);
+        spinnerRole.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                if ("commercial".equalsIgnoreCase(spinnerRole.getSelectedItem().toString())) {
+                    getUsers("client", new UsersCallback() {
+                        @Override
+                        public void onCallback(List<User> users) {
+                            ArrayAdapter<User> userAdapter = new ArrayAdapter<>(detailsUser.this, android.R.layout.simple_spinner_item,users);
+                            userAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                            spinnerUsers.setAdapter(userAdapter);
+                            spinnerUsers.setVisibility(View.VISIBLE);
+                        }
+                    });
+                } else if ("client".equalsIgnoreCase(spinnerRole.getSelectedItem().toString())) {
+                    getUsers("commercial", new UsersCallback() {
+                        @Override
+                        public void onCallback(List<User> users) {
+                            ArrayAdapter<User> userAdapter = new ArrayAdapter<>(detailsUser.this, android.R.layout.simple_spinner_item,users);
+                            userAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                            spinnerUsers.setAdapter(userAdapter);
+                            spinnerUsers.setVisibility(View.VISIBLE);
+                        }
+                    });
+                }else {
+                    spinnerUsers.setVisibility(View.GONE);
+                }
+            }
 
-        if ("commercial".equalsIgnoreCase(currentUser.getRole())) {
-            getUsers("client", new UsersCallback() {
-                @Override
-                public void onCallback(List<User> users) {
-                    ArrayAdapter<User> userAdapter = new ArrayAdapter<>(detailsUser.this, android.R.layout.simple_spinner_item,users);
-                    userAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                    spinnerUsers.setAdapter(userAdapter);
-                    spinnerUsers.setVisibility(View.VISIBLE);
-                }
-            });
-        } else if ("client".equalsIgnoreCase(currentUser.getRole())) {
-            getUsers("commercial", new UsersCallback() {
-                @Override
-                public void onCallback(List<User> users) {
-                    ArrayAdapter<User> userAdapter = new ArrayAdapter<>(detailsUser.this, android.R.layout.simple_spinner_item,users);
-                    userAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                    spinnerUsers.setAdapter(userAdapter);
-                    spinnerUsers.setVisibility(View.VISIBLE);
-                }
-            });
-        }else {
-            spinnerUsers.setVisibility(View.GONE);
-        }
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
 
         builder.setPositiveButton("Enregistrer", new DialogInterface.OnClickListener() {
             @Override
