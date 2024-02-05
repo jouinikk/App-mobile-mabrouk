@@ -2,6 +2,7 @@ package com.example.gestiondecommerce;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -52,6 +53,12 @@ public class CommercialActivity extends AppCompatActivity {
                 validatePendingTransaction();
             }
         });
+        androidx.appcompat.widget.Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+        getSupportActionBar().setTitle("Historique");
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
     private void listenForMvtChanges() {
@@ -124,5 +131,16 @@ public class CommercialActivity extends AppCompatActivity {
             mvtListener.remove();
         }
         super.onDestroy();
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                onBackPressed();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 }

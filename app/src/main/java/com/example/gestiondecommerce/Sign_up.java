@@ -106,7 +106,9 @@ public class Sign_up extends AppCompatActivity {
                 registerUser();
             }
         });
+
     }
+
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {

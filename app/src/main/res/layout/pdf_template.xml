@@ -4,13 +4,13 @@
     android:layout_height="wrap_content"
     android:orientation="vertical"
     android:layout_margin="20dp"
-    android:padding="10dp">
+    android:padding="20dp">
 
     <TextView
         android:id="@+id/idTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Ticket ID: "
+        android:text="Ticket ID: 123456"
         android:textColor="@color/black"
         android:textSize="18sp"
         android:textStyle="bold"
@@ -20,7 +20,7 @@
         android:id="@+id/montantTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Amount: "
+        android:text="Amount: $50.00"
         android:textColor="@color/black"
         android:textSize="16sp"
         android:textStyle="bold"
@@ -30,7 +30,7 @@
         android:id="@+id/dateTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Date: "
+        android:text="Date: 12/02/2024 18:45"
         android:textColor="@color/black"
         android:textSize="16sp"
         android:textStyle="bold"
@@ -40,7 +40,7 @@
         android:id="@+id/commercialTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Handled by: "
+        android:text="Handled by: John Doe"
         android:textColor="@color/black"
         android:textSize="16sp"
         android:textStyle="bold"

@@ -6,15 +6,25 @@
     android:layout_height="match_parent"
     tools:context=".ClientsListe">
 
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="?attr/colorPrimary"
+        android:elevation="4dp"
+        android:layout_marginBottom="20dp"
+        android:theme="?attr/actionBarTheme" />
+
     <TextView
         android:id="@+id/header"
+        app:layout_constraintTop_toBottomOf="@id/toolbar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
         android:text="Liste des Clients"
         android:textSize="24sp"
         android:textStyle="bold"
-        tools:layout_editor_absoluteX="128dp"
-        tools:layout_editor_absoluteY="35dp" />
+       />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler"

@@ -5,14 +5,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#1E1E1E"
+    android:padding="50dp"
     tools:context=".MainActivity">
 
     <EditText
         android:id="@+id/mail"
         android:layout_width="0dp"
         android:layout_height="56dp"
-        android:layout_marginTop="48dp"
+        android:layout_marginTop="150dp"
         android:background="@android:drawable/edit_text"
         android:hint="Email"
         android:paddingStart="16dp"
