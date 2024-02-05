@@ -1,0 +1,92 @@
+<!-- edit_dialog.xml -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="?attr/colorPrimary"
+        android:elevation="4dp"
+        android:layout_marginBottom="20dp"
+        android:theme="?attr/actionBarTheme" />
+
+    <TextView
+        android:id="@+id/header"
+        app:layout_constraintTop_toBottomOf="@id/toolbar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text="Ajout d'un utilisateur"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        />
+
+    <EditText
+        android:id="@+id/editTextNom"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:hint="Nom" />
+
+
+
+    <EditText
+        android:id="@+id/editTextEmail"
+        android:layout_marginTop="20dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Email" />
+
+    <EditText
+        android:id="@+id/editTextTel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+
+        android:hint="Tel" />
+
+    <EditText
+        android:id="@+id/editTextpws"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:hint="Password" />
+
+
+
+    <Spinner
+        android:id="@+id/spinnerRole"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:entries="@array/roles" />
+
+    <!-- Additional Fields (Commercial and Client) -->
+    <EditText
+        android:id="@+id/editTextCommercialAffecte"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Commercial"
+        android:layout_marginTop="20dp"
+        android:visibility="gone" />
+
+    <EditText
+        android:id="@+id/editTextClientAffecte"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Client"
+        android:layout_marginTop="20dp"
+        android:visibility="gone" />
+
+    <!-- Button for Adding -->
+    <Button
+        android:id="@+id/button2"
+        android:layout_width="match_parent"
+        android:layout_height="65dp"
+        android:layout_marginTop="20dp"
+        android:text="Ajouter" />
+</LinearLayout>
