@@ -15,7 +15,11 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.GestionDeCommerce"
         tools:targetApi="31">
-        <activity android:name=".CommercialActivity"
+        <activity
+            android:name=".ActivitySociete"
+            android:exported="false" />
+        <activity
+            android:name=".CommercialActivity"
             android:exported="false" />
         <activity
             android:name=".add_form"

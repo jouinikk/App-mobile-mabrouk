@@ -1,6 +1,7 @@
 package com.example.gestiondecommerce;
 
 import android.app.DatePickerDialog;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -13,11 +14,14 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase. firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -70,12 +74,6 @@ public class interface_admin extends AppCompatActivity {
         Button btn = findViewById(R.id.button);
         btn.setOnClickListener(view -> updateValidationCAdmin());
 
-        Button btnLogout = findViewById(R.id.button1);
-        btnLogout.setOnClickListener(view -> {
-            Intent intent = new Intent(interface_admin.this, MainActivity.class);
-            startActivity(intent);
-            finish();
-        });
 
         chercher.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -95,6 +93,15 @@ public class interface_admin extends AppCompatActivity {
         getSupportActionBar().setTitle("Historique");
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        Button efface = findViewById(R.id.effacer);
+        efface.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                clean();
+
+            }
+        });
     }
 
     @Override
@@ -121,6 +128,7 @@ public class interface_admin extends AppCompatActivity {
                             mvtList.clear(); // Effacer la liste actuelle
                             for (DocumentSnapshot document : task.getResult()) {
                                 MVT mvt = document.toObject(MVT.class);
+                                mvt.setId(document.getId());
                                 mvtList.add(mvt);
                             }
                             if(mvtList.isEmpty()) Toast.makeText(this,"Liste vide",Toast.LENGTH_SHORT).show();
@@ -226,5 +234,20 @@ public class interface_admin extends AppCompatActivity {
             Toast.makeText(this, "Selected Date: " + formattedDate, Toast.LENGTH_SHORT).show();
            this.date = formattedDate;
         }
+    }
+
+    public void clean(){
+        ProgressDialog pd = new ProgressDialog(this);
+        pd.setMessage("Effacement..");
+        pd.show();
+        for(MVT mvt:mvtList){
+             db.collection("mvt")
+                 .document(mvt.getId())
+                 .delete();
+        }
+        pd.dismiss();
+        Intent intent = new Intent(this,interface_admin.class);
+        startActivity(intent);
+        finish();
     }
 }

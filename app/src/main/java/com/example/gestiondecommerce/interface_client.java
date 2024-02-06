@@ -42,6 +42,7 @@ import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -209,27 +210,50 @@ public class interface_client extends AppCompatActivity{
     private void generatePdfForMVT(MVT mvt) {
         View pdfTemplateView = LayoutInflater.from(interface_client.this).inflate(R.layout.pdf_template, null);
 
+
         TextView idTextView = pdfTemplateView.findViewById(R.id.idTextView);
         TextView montantTextView = pdfTemplateView.findViewById(R.id.montantTextView);
         TextView dateTextView = pdfTemplateView.findViewById(R.id.dateTextView);
         TextView commercialTextView = pdfTemplateView.findViewById(R.id.commercialTextView);
+        TextView societe = pdfTemplateView.findViewById(R.id.societe);
+        TextView adresse = pdfTemplateView.findViewById(R.id.adresse);
+        TextView matricule = pdfTemplateView.findViewById(R.id.matricule);
 
-        idTextView.setText("ID: " + mvt.getId());
-        montantTextView.setText("Montant: " + mvt.getMontant());
-        dateTextView.setText("Date: " + mvt.getDate());
-        commercialTextView.setText("Commercial: " + mvt.getCommercial());
 
-        // Check for permissions before generating PDF
-        if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                != PackageManager.PERMISSION_GRANTED) {
-            // Permission is not granted, request it
-            ActivityCompat.requestPermissions((Activity) this,
-                    new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
-                    WRITE_EXTERNAL_STORAGE_REQUEST_CODE);
-        } else {
-            // Permission is already granted, proceed with generating PDF
-            generatePdf(pdfTemplateView);
-        }
+        db.collection("societe")
+                .limit(1)
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>(){
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        Log.d("hmmm", "success");
+                        if (task.isSuccessful()) {
+                            Societe s = task.getResult().getDocuments().get(0).toObject(Societe.class);
+                            societe.setText(s.getNom());
+                            adresse.setText(s.getAdresse());
+                            matricule.setText(s.getAdresse());
+                        }
+
+                        idTextView.setText("ID: " + mvt.getId());
+                        montantTextView.setText("Montant: " + mvt.getMontant());
+                        dateTextView.setText("Date: " + mvt.getDate());
+                        commercialTextView.setText("Commercial: " + mvt.getCommercial());
+
+                        if (ContextCompat.checkSelfPermission(interface_client.this, android.Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                                != PackageManager.PERMISSION_GRANTED) {
+                            // Permission is not granted, request it
+                            ActivityCompat.requestPermissions((Activity) interface_client.this,
+                                    new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                                    WRITE_EXTERNAL_STORAGE_REQUEST_CODE);
+                        } else {
+                            // Permission is already granted, proceed with generating PDF
+                            generatePdf(pdfTemplateView);
+                        }
+                    }
+                });
+
+
+
     }
 
     private void generatePdf(View templateView) {

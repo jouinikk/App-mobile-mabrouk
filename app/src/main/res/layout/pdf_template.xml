@@ -1,7 +1,7 @@
 <!-- res/layout/pdf_template.xml -->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
     android:orientation="vertical"
     android:layout_margin="20dp"
     android:padding="20dp">
@@ -45,5 +45,36 @@
         android:textSize="16sp"
         android:textStyle="bold"
         android:layout_marginBottom="8dp" />
+
+    <TextView
+        android:id="@+id/societe"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Societe"
+        android:layout_marginTop="20dp"
+        android:textColor="@color/black"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        android:layout_marginBottom="8dp" />
+
+    <TextView
+        android:id="@+id/adresse"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="adresse"
+        android:textColor="@color/black"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        android:layout_marginBottom="8dp" />
+    <TextView
+        android:id="@+id/matricule"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Matricule"
+        android:textColor="@color/black"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        android:layout_marginBottom="8dp" />
+
 
 </LinearLayout>

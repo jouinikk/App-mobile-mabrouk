@@ -76,6 +76,26 @@ public class interface_admin_principal extends AppCompatActivity {
                 finish();
             }
         });
+
+        Button societe = findViewById(R.id.societe);
+        societe.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(interface_admin_principal.this,ActivitySociete.class);
+                startActivity(intent);
+            }
+        });
+
+        Button hist = findViewById(R.id.hist);
+        hist.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(interface_admin_principal.this,interface_admin.class);
+                startActivity(intent);
+            }
+        });
+
+
         androidx.appcompat.widget.Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
