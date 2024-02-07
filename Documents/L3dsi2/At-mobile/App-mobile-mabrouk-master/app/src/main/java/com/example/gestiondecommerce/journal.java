@@ -1,5 +1,6 @@
 package com.example.gestiondecommerce;
 
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -37,6 +38,7 @@ public class journal extends AppCompatActivity {
     String formattedDate = dateFormat.format(new Date()).substring(0, 10);
     Button valide;
     Button quit;
+    Button historique ;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,6 +46,7 @@ public class journal extends AppCompatActivity {
         valide =findViewById(R.id.valide);
         recyclerView = findViewById(R.id.rv);
         quit = findViewById(R.id.quite);
+        historique=findViewById(R.id.histo);
         getData(new MvtsCallBack() {
             @Override
             public void onCallBack(List<MVT> mvtList) {
@@ -66,7 +69,6 @@ public class journal extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(journal.this,interface_admin_principal.class);
                 startActivity(intent);
-                finish();
             }
         });
         androidx.appcompat.widget.Toolbar toolbar = findViewById(R.id.toolbar);
@@ -75,6 +77,14 @@ public class journal extends AppCompatActivity {
         getSupportActionBar().setTitle("Historique");
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+    historique.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(journal.this,interface_admin.class);
+                startActivity(intent);
+            }
+        });
+
     }
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {

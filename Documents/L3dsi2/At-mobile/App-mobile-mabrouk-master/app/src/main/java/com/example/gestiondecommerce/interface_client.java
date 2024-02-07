@@ -149,7 +149,6 @@ public class interface_client extends AppCompatActivity{
                 editor.apply();
                 Intent intent = new Intent(interface_client.this, MainActivity.class);
                 startActivity(intent);
-                finish();
             }
         });
 
@@ -159,7 +158,6 @@ public class interface_client extends AppCompatActivity{
              generatePdfForMVT(mvt);
              Intent intent1 = new Intent(interface_client.this,interface_client.class);
              startActivity(intent1);
-             finish();
             }
         });
 

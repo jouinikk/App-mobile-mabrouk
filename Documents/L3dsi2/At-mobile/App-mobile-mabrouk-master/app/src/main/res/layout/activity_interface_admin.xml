@@ -26,38 +26,26 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/toolbar" />
 
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv"
         android:layout_width="408dp"
-        android:layout_height="456dp"
+        android:layout_height="402dp"
         android:layout_marginTop="100dp"
-        android:visibility="gone"
-        app:layout_constraintBottom_toTopOf="@+id/button"
+        android:visibility="visible"
         app:layout_constraintDimensionRatio="3:4"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView4"
-        app:layout_constraintVertical_bias="0.5" />
+        app:layout_constraintTop_toBottomOf="@+id/textView4" />
 
     <Button
-        android:id="@+id/button"
-        android:layout_width="0dp"
+        android:id="@+id/effacer"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
-        android:text="Valider"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/button1"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/rv" />
-
-    <Button
-        android:id="@+id/button1"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:text="Quitter"
+        android:layout_marginHorizontal="20dp"
+        android:text="Supprimer"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/button"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView9" />
 
     <Spinner
@@ -78,11 +66,11 @@
 
     <Button
         android:id="@+id/btnDatePicker"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="56dp"
+        android:layout_width="116dp"
+        android:layout_height="55dp"
+        android:layout_marginStart="164dp"
         android:layout_marginTop="20dp"
-        android:text="Choisir Date"
+        android:text="Choisir Date Fin"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/spinner" />
 
@@ -97,11 +85,21 @@
 
     <Button
         android:id="@+id/cher"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="105dp"
+        android:layout_height="56dp"
         android:layout_marginTop="20dp"
         android:text="chercher"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/btnDatePicker"
+        app:layout_constraintTop_toBottomOf="@+id/spinner" />
+
+    <Button
+        android:id="@+id/btnDatePicker1"
+        android:layout_width="126dp"
+        android:layout_height="53dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="20dp"
+        android:text="choisir  Date Début "
+        app:layout_constraintEnd_toStartOf="@+id/btnDatePicker"
         app:layout_constraintTop_toBottomOf="@+id/spinner" />
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -69,7 +69,6 @@ public class MainActivity extends AppCompatActivity {
                                                 editor.putString("commercial", document.getString("commercialAffectee"));
                                                 editor.apply();
                                                 startActivity(intent);
-                                                finish();  // Optionnel : fermer cette activité pour éviter le retour en arrière
                                                 return;
                                             }
                                             else
@@ -78,7 +77,6 @@ public class MainActivity extends AppCompatActivity {
                                                 intent.putExtra("client", document.getString("clientAffectee"));
                                                 intent.putExtra("commercial", document.getString("name"));
                                                 startActivity(intent);
-                                                finish();  // Optionnel : fermer cette activité pour éviter le retour en arrière
                                                 return;
                                             }
                                             else
@@ -86,14 +84,12 @@ public class MainActivity extends AppCompatActivity {
                                                 // Rediriger vers ClientActivity
                                                 Intent intent = new Intent(MainActivity.this, interface_admin_principal.class);
                                                 startActivity(intent);
-                                                finish();  // Optionnel : fermer cette activité pour éviter le retour en arrière
                                                 return;
                                             } else
                                             if (email.equals(documentEmail) && psw.equals(documentPsw) && "superUser".equals(documentRole)) {
                                                 // Rediriger vers ClientActivity
                                                 Intent intent = new Intent(MainActivity.this, SuperUser.class);
                                                 startActivity(intent);
-                                                finish();  // Optionnel : fermer cette activité pour éviter le retour en arrière
                                                 return;
                                             }
                                         }
