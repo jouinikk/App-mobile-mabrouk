@@ -74,6 +74,7 @@ public class interface_client extends AppCompatActivity{
     Button imprim;
     Button update;
     Button submitBtn;
+    TextView comm;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -89,7 +90,8 @@ public class interface_client extends AppCompatActivity{
         attEdit = findViewById(R.id.montantTextView);
         update = findViewById(R.id.update);
         imprim = findViewById(R.id.imprimer);
-
+        comm = findViewById(R.id.commercial);
+        comm.setText(commercial);
         update.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -150,7 +152,7 @@ public class interface_client extends AppCompatActivity{
                 editor.apply();
                 Intent intent = new Intent(interface_client.this, MainActivity.class);
                 startActivity(intent);
-
+                finish();
             }
         });
 
@@ -164,23 +166,6 @@ public class interface_client extends AppCompatActivity{
             }
         });
 
-        androidx.appcompat.widget.Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-
-        getSupportActionBar().setTitle("Historique");
-
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                onBackPressed();
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
     }
     private void ShowStatus() {;
         montantInput.setVisibility(View.INVISIBLE);
@@ -245,6 +230,7 @@ public class interface_client extends AppCompatActivity{
                             ActivityCompat.requestPermissions((Activity) interface_client.this,
                                     new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
                                     WRITE_EXTERNAL_STORAGE_REQUEST_CODE);
+                            generatePdf(pdfTemplateView);
                         } else {
                             // Permission is already granted, proceed with generating PDF
                             generatePdf(pdfTemplateView);
@@ -310,6 +296,7 @@ public class interface_client extends AppCompatActivity{
 
         try {
             this.startActivity(intent);
+
         } catch (ActivityNotFoundException e) {
             // Handle the case where no PDF viewer app is available on the device
             Toast.makeText(this, "No PDF viewer app found", Toast.LENGTH_SHORT).show();

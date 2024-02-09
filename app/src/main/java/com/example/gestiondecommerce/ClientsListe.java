@@ -45,7 +45,7 @@ public class ClientsListe extends AppCompatActivity {
         androidx.appcompat.widget.Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        getSupportActionBar().setTitle("Historique");
+        getSupportActionBar().setTitle("Liste des utilisaturs");
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }

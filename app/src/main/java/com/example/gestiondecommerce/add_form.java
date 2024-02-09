@@ -36,7 +36,7 @@ public class add_form extends AppCompatActivity {
         setContentView(R.layout.activity_add_form);
         db = FirebaseFirestore.getInstance();
         roleSpinner = findViewById(R.id.spinnerRole);
-        usersSpinner = findViewById(R.id.spinnerUser);
+        usersSpinner = findViewById(R.id.spinnerUsers);
         editTextNom = findViewById(R.id.editTextNom);
         editTextEmail = findViewById(R.id.editTextEmail);
         editTextTel = findViewById(R.id.editTextTel);
@@ -122,7 +122,7 @@ public class add_form extends AppCompatActivity {
         });
         androidx.appcompat.widget.Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle("Historique");
+        getSupportActionBar().setTitle("Ajouter un utilisateur");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
     @Override

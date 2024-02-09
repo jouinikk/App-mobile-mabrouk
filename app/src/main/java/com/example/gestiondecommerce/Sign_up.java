@@ -43,9 +43,12 @@ public class Sign_up extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_up);
 
-        Toolbar toolbar = findViewById(R.id.toolbar);
+        androidx.appcompat.widget.Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true); // Enable the back button
+
+        getSupportActionBar().setTitle("Ajouter un utilisateur");
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         spinnerUser = findViewById(R.id.spinnerUser);
 
@@ -186,7 +189,7 @@ public class Sign_up extends AppCompatActivity {
             user.setCommercialAffectee(com.getName());
         } else if (role.equals("commercial")){
             User cli =(User)spinnerUser.getSelectedItem();
-            user.setCommercialAffectee(cli.getName());
+            user.setClientAffectee(cli.getName());
         }
         firestore.collection("User")
                 .document(firebaseAuth.getCurrentUser().getUid())
@@ -204,23 +207,22 @@ public class Sign_up extends AppCompatActivity {
                     }
                 });
     }
-    private boolean isValidEmail(CharSequence target) {
+    private boolean isValidEmail(CharSequence target){
         return !TextUtils.isEmpty(target) && Patterns.EMAIL_ADDRESS.matcher(target).matches();
     }
-
     private void getUsers(String role,UsersCallback callback){
         List<User> users = new ArrayList<>();
         db.collection("User").whereEqualTo("role", role)
                 .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>(){
                     @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                    public void onComplete(@NonNull Task<QuerySnapshot> task){
                         if(task.isSuccessful()){
                             for(QueryDocumentSnapshot document:task.getResult()){
                                 users.add(document.toObject(User.class));
                             }
                             callback.onCallback(users);
-                        }else {
+                        }else{
                             Toast.makeText(Sign_up.this, "liste vide",Toast.LENGTH_SHORT);
                         }
                     }

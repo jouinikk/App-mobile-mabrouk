@@ -9,24 +9,29 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+
 import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.ListenerRegistration;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import java.text.DateFormat;
+import java.text.FieldPosition;
+import java.text.ParsePosition;
+import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 
 public class CommercialActivity extends AppCompatActivity {
-
     private TextView clientInfoTextView;
     private Button validateBtn;
     private FirebaseFirestore db;
     private ListenerRegistration mvtListener;
-
     Intent intent;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,56 +39,53 @@ public class CommercialActivity extends AppCompatActivity {
         setContentView(R.layout.activity_commercial);
 
         intent = getIntent();
-
         clientInfoTextView = findViewById(R.id.clientInfoTextView);
         validateBtn = findViewById(R.id.validateBtn);
 
-        Toast.makeText(this,(new Date().toString().substring(0,10)),Toast.LENGTH_LONG).show();
-
         db = FirebaseFirestore.getInstance();
-
-        // Listen for real-time updates on the 'mvt' collection
         listenForMvtChanges();
 
         validateBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Handle validation of the selected transaction
-                // For simplicity, let's assume there is only one pending transaction
                 validatePendingTransaction();
             }
         });
+
+        TextView clientToday = findViewById(R.id.clientToday);
+        clientToday.setText("Votre Client pour aujourd'hui est: "+intent.getStringExtra("client"));
+
         androidx.appcompat.widget.Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        getSupportActionBar().setTitle("Historique");
+        getSupportActionBar().setTitle("Espace Commercial");
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
-
     private void listenForMvtChanges() {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+        String date = dateFormat.format(new Date()).substring(0, 10);
         mvtListener = db.collection("mvt")
                 .whereEqualTo("commercial",intent.getStringExtra("commercial") )
                 .whereEqualTo("validation_commercial", false)
+                .whereEqualTo("nomClient", intent.getStringExtra("client"))
+                .whereEqualTo("date", date)
+                .limit(1)
                 .addSnapshotListener((value, error) -> {
-                    if (error != null) {
+                    if (error != null){
                         Toast.makeText(CommercialActivity.this, "Error listening for updates", Toast.LENGTH_SHORT).show();
                         return;
                     }
                     if (value != null && !value.isEmpty()) {
-                        // There is a pending transaction
                         DocumentChange documentChange = value.getDocumentChanges().get(0);
                         MVT mvt = documentChange.getDocument().toObject(MVT.class);
                         mvt.setId(documentChange.getDocument().getId());
-
                         updateClientInfo(mvt);
                     } else {
-                        // No pending transactions
                         updateClientInfo(null);
                     }
                 });
     }
-
     private void validatePendingTransaction() {
         db.collection("mvt").whereEqualTo("validation_commercial", false)
                 .get()
@@ -110,29 +112,24 @@ public class CommercialActivity extends AppCompatActivity {
                     }
                 });
     }
-
     private void updateClientInfo(MVT mvt) {
         if (mvt != null) {
-            // Display client information
             String clientInfo = "Client: " + mvt.getNomClient() + "\nMontant: " + mvt.getMontant();
             clientInfoTextView.setText(clientInfo);
             validateBtn.setVisibility(View.VISIBLE);
         } else {
-            // No pending transactions
             clientInfoTextView.setText("Pas de mouvement à l'heure");
             validateBtn.setVisibility(View.GONE);
         }
     }
-
     @Override
     protected void onDestroy() {
-        // Remove the real-time listener when the activity is destroyed
+
         if (mvtListener != null) {
             mvtListener.remove();
         }
         super.onDestroy();
     }
-
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {

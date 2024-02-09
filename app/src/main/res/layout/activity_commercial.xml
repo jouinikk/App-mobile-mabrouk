@@ -16,10 +16,17 @@
         android:theme="?attr/actionBarTheme" />
 
     <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/toolbar"
+        android:layout_marginLeft="20dp"
+        android:text="Votre Client pour aujourd'hui est :"
+        android:id="@+id/clientToday"/>
+    <TextView
         android:id="@+id/clientInfoTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/toolbar"
+        android:layout_below="@+id/clientToday"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="20dp"
         android:gravity="center"

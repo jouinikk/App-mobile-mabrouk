@@ -72,7 +72,7 @@ public class journal extends AppCompatActivity {
         androidx.appcompat.widget.Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        getSupportActionBar().setTitle("Historique");
+        getSupportActionBar().setTitle("Journal");
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }

@@ -2,6 +2,7 @@ package com.example.gestiondecommerce;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.widget.Button;
 
 import androidx.annotation.NonNull;
@@ -57,7 +58,26 @@ public class SuperUser extends AppCompatActivity {
             Intent i = new Intent(SuperUser.this,add_form.class);
             startActivity(i);
         });
+
+        androidx.appcompat.widget.Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+        getSupportActionBar().setTitle("Espace Super utilisateur");
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
     }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            // Handle the back button click
+            onBackPressed();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
 
     private void fetchDataFromFirestore() {
         db.collection("User") // Remplacez par le nom réel de votre collection
@@ -73,8 +93,10 @@ public class SuperUser extends AppCompatActivity {
                             // Modification ici pour récupérer tel en tant qu'objet et le convertir en int
                             Object telObject = document.get("tel");
                             int tel = (telObject instanceof Number) ? ((Number) telObject).intValue() : 0;
-
-                            User user = new User(email, name, role, tel);
+                            String CA=document.getString("clientAffectee");
+                            String ComA=document.getString("commercialAffectee");
+                            String password=document.getString("password");
+                            User user = new User(name,email,tel,password,role,ComA,CA);
                             user.setId(document.getId()); // Set the document id as user id
                             userList.add(user);
                         }

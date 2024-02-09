@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -33,7 +34,6 @@ public class ClientListAdapter extends RecyclerView.Adapter<ClientListAdapter.Cl
     Context context;
     FirebaseFirestore db = FirebaseFirestore.getInstance();
     String from;
-
     public ClientListAdapter(List<User> users, Context context, String from) {
         this.users = users;
         this.context = context;
@@ -46,43 +46,49 @@ public class ClientListAdapter extends RecyclerView.Adapter<ClientListAdapter.Cl
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.affectation_details, parent, false);
         return new ClientDetailsVH(view);
     }
-
     @Override
     public void onBindViewHolder(@NonNull ClientDetailsVH holder, int position) {
         User user = users.get(position);
         holder.nc.setText(user.getName());
-        String role="client";
-        if (from.equals(role)){
-            role = "commercial";
+        String userRole = "client";
+        if (from.equals(userRole)) {
+            userRole = "commercial";
+            holder.labelUser.setText("Client: ");
+            holder.labelAffected.setText("Commercial: ");
+        }else{
+            holder.labelUser.setText("Commercial: ");
+            holder.labelAffected.setText("Client: ");
         }
-        getUsers(role,new UsersCallback() {
+        getUsers(userRole, new UsersCallback() {
             @Override
             public void onCallback(List<User> users) {
                 ArrayAdapter<User> userArrayAdapter = new ArrayAdapter<>(context, android.R.layout.simple_spinner_item, users);
                 userArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                User placeholder = new User();
+                placeholder.setName("Choisir un utilisateur");
+                userArrayAdapter.insert(placeholder, 0);
                 holder.sp.setAdapter(userArrayAdapter);
+                holder.sp.setSelection(0);
+                holder.update.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if(holder.sp.getSelectedItemPosition() != 0) {
+                            User selected = (User) holder.sp.getSelectedItem();
+                            updateUser(user.getRole(), user.getId(), selected.getName());
+                            updateUser(selected.getRole(), selected.getId(), user.getName());
+                        }else {
+                            Toast.makeText(context,"Choisir un utilisateur svp", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
             }
         });
-        holder.sp.setSelected(false);
-        holder.sp.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                User selected = (User) holder.sp.getSelectedItem();
-                updateUser(user.getRole(), user.getId(), selected.getName());
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
-
     }
 
-    private void updateUser(String role,String user, String selected) {
+    private void updateUser(String role,String userId, String selected) {
         String affectee = "commercialAffectee";
         if(role.equals("commercial")) affectee = "clientAffectee";
-        db.collection("User").document(user)
+        db.collection("User").document(userId)
         .update(affectee, selected)
         .addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
@@ -100,11 +106,17 @@ public class ClientListAdapter extends RecyclerView.Adapter<ClientListAdapter.Cl
     public class ClientDetailsVH extends RecyclerView.ViewHolder {
         Spinner sp;
         TextView nc;
+        TextView labelUser;
+        TextView labelAffected;
+        Button update;
 
         public ClientDetailsVH(@NonNull View itemView) {
             super(itemView);
             sp = itemView.findViewById(R.id.affected);
             nc = itemView.findViewById(R.id.nomClient);
+            labelUser = itemView.findViewById(R.id.labelNomClient);
+            labelAffected = itemView.findViewById(R.id.labelCommercial);
+            update = itemView.findViewById(R.id.update);
         }
     }
 

@@ -90,7 +90,6 @@ public class MainActivity extends AppCompatActivity {
                                                 // Rediriger vers ClientActivity
                                                 Intent intent = new Intent(MainActivity.this, SuperUser.class);
                                                 startActivity(intent);
-
                                                 return;
                                             }
                                         }
