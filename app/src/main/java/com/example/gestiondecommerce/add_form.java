@@ -3,10 +3,10 @@ package com.example.gestiondecommerce;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -22,12 +22,12 @@ import com.google.firebase.firestore.QuerySnapshot;
 import java.util.ArrayList;
 import java.util.List;
 public class add_form extends AppCompatActivity {
-    private Spinner roleSpinner;
     private Spinner usersSpinner;
     private EditText editTextNom;
     private EditText editTextEmail;
     private EditText editTextTel;
     private EditText editTextpws;
+    Intent intent;
     private Button addButton;
     private FirebaseFirestore db;
     @Override
@@ -35,78 +35,62 @@ public class add_form extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_form);
         db = FirebaseFirestore.getInstance();
-        roleSpinner = findViewById(R.id.spinnerRole);
         usersSpinner = findViewById(R.id.spinnerUsers);
         editTextNom = findViewById(R.id.editTextNom);
+        String role = intent.getStringExtra("from");
         editTextEmail = findViewById(R.id.editTextEmail);
         editTextTel = findViewById(R.id.editTextTel);
         editTextpws = findViewById(R.id.editTextpws);
         addButton = findViewById(R.id.button2);
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(
-                this,
-                R.array.roles,
-                android.R.layout.simple_spinner_item
-        );
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        roleSpinner.setAdapter(adapter);
-        roleSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
-                String selectedRole = parentView.getItemAtPosition(position).toString();
-                if ("commercial".equals(selectedRole)) {
-                   getUsers("client", new UsersCallback() {
-                       @Override
-                       public void onCallback(List<User> users) {
-                           ArrayAdapter<User> userAdapter = new ArrayAdapter<>(add_form.this, android.R.layout.simple_spinner_item,users);
-                           userAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                           usersSpinner.setAdapter(userAdapter);
-                           usersSpinner.setVisibility(View.VISIBLE);                       }
-                   });
-                } else if ("client".equals(selectedRole)) {
-                    getUsers("commercial", new UsersCallback() {
-                        @Override
-                        public void onCallback(List<User> users) {
-                            ArrayAdapter<User> userAdapter = new ArrayAdapter<>(add_form.this, android.R.layout.simple_spinner_item,users);
-                            userAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                            usersSpinner.setAdapter(userAdapter);
-                            usersSpinner.setVisibility(View.VISIBLE);
-                        }
-                    });
+        if ("commercial".equals(role)) {
+            getUsers("client", new UsersCallback() {
+                @Override
+                public void onCallback(List<User> users) {
+                    ArrayAdapter<User> userAdapter = new ArrayAdapter<>(add_form.this, android.R.layout.simple_spinner_item,users);
+                    userAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                    usersSpinner.setAdapter(userAdapter);
+                    usersSpinner.setVisibility(View.VISIBLE);                       }
+            });
+        } else if ("client".equals(role)) {
+            getUsers("commercial", new UsersCallback() {
+                @Override
+                public void onCallback(List<User> users) {
+                    ArrayAdapter<User> userAdapter = new ArrayAdapter<>(add_form.this, android.R.layout.simple_spinner_item,users);
+                    userAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                    usersSpinner.setAdapter(userAdapter);
+                    usersSpinner.setVisibility(View.VISIBLE);
                 }
-                else {
-                    usersSpinner.setVisibility(View.GONE);
-                }
-            }
-            @Override
-            public void onNothingSelected(AdapterView<?> parentView) {
-            }
-        });
+            });
+        }
+
+
         addButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 String nom = editTextNom.getText().toString();
+
                 if (nom.isEmpty()) {
                     Toast.makeText(add_form.this, "Veuillez saisir un nom", Toast.LENGTH_SHORT).show();
                     return;
                 }
+
                 String email = editTextEmail.getText().toString();
                 int tel = Integer.parseInt(editTextTel.getText().toString());
                 String password = editTextpws.getText().toString();
-                String selectedRole = roleSpinner.getSelectedItem().toString();
-
                 User newUser = new User();
 
                 newUser.setName(nom);
                 newUser.setEmail(email);
                 newUser.setTel(tel);
                 newUser.setPassword(password);
-                newUser.setRole(selectedRole);
+                newUser.setRole(role);
 
                 User user =(User) usersSpinner.getSelectedItem();
 
-                if (selectedRole.equals("client")){
+                if (role.equals("client")){
                     newUser.setCommercialAffectee(user.getName());
-                }else if(selectedRole.equals("commercial")){
+                }else if(role.equals("commercial")){
                     newUser.setClientAffectee(user.getName());
                 }
                 db.collection("User").add(newUser)
@@ -141,21 +125,21 @@ public class add_form extends AppCompatActivity {
         ProgressDialog pd = new ProgressDialog(this);
         pd.setMessage("getting data...");
         pd.show();
-         db.collection("User")
-                 .whereEqualTo("role",role)
-                 .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                     @Override
-                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                         if(task.isSuccessful()){
-                             for(QueryDocumentSnapshot document:task.getResult()){
-                                 User user = document.toObject(User.class);
-                                 user.setId(document.getId());
-                                 users.add(user);
-                             }
+        db.collection("User")
+                .whereEqualTo("role",role)
+                .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if(task.isSuccessful()){
+                            for(QueryDocumentSnapshot document:task.getResult()){
+                                User user = document.toObject(User.class);
+                                user.setId(document.getId());
+                                users.add(user);
+                            }
                             callback.onCallback(users);
-                         }
-                         pd.dismiss();
-                     }
-                 });
+                        }
+                        pd.dismiss();
+                    }
+                });
     }
 }

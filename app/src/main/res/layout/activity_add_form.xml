@@ -57,14 +57,6 @@
         android:hint="Password" />
 
 
-
-    <Spinner
-        android:id="@+id/spinnerRole"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:entries="@array/roles" />
-
     <!-- Additional Fields (Commercial and Client) -->
     <Spinner
         android:id="@+id/spinnerUsers"

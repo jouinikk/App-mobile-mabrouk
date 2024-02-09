@@ -18,12 +18,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SuperUser extends AppCompatActivity {
-
     private RecyclerView recyclerView;
     private SuperUserAdapter adapter;
     private List<User> userList;
     private FirebaseFirestore db;
-
+    private String role;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,9 +52,11 @@ public class SuperUser extends AppCompatActivity {
             intent.putExtra("data", user);
             startActivity(intent);
         });
-        Button btn1=findViewById(R.id.button4);
+
+        Button btn1 = findViewById(R.id.button4);
         btn1.setOnClickListener(view -> {
-            Intent i = new Intent(SuperUser.this,add_form.class);
+            Intent i = new Intent(SuperUser.this, add_form.class);
+            i.putExtra("from", role);
             startActivity(i);
         });
 
@@ -66,6 +67,16 @@ public class SuperUser extends AppCompatActivity {
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        // Récupérez le rôle passé depuis l'intent
+        Intent intent = getIntent();
+        role = intent.getStringExtra("role");
+
+        // Utilisez ce rôle pour filtrer les utilisateurs depuis Firestore
+        if (role != null) {
+            fetchDataFromFirestore();
+        } else {
+            // Gérer le cas où le rôle n'est pas passé correctement
+        }
     }
 
     @Override
@@ -78,9 +89,9 @@ public class SuperUser extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-
     private void fetchDataFromFirestore() {
-        db.collection("User") // Remplacez par le nom réel de votre collection
+        db.collection("User")
+                .whereEqualTo("role", role)
                 .get()
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
@@ -106,6 +117,4 @@ public class SuperUser extends AppCompatActivity {
                     }
                 });
     }
-
-
 }
