@@ -75,12 +75,13 @@ public class interface_client extends AppCompatActivity{
     Button update;
     Button submitBtn;
     TextView comm;
+    SharedPreferences preferences;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_interface_client);
         intent=getIntent();
-        SharedPreferences preferences = getSharedPreferences("user", MODE_PRIVATE);
+        preferences = getSharedPreferences("user", MODE_PRIVATE);
         commercial = preferences.getString("commercial", "");
         montantInput = findViewById(R.id.montantInput);
         submitBtn = findViewById(R.id.submitBtn);
@@ -92,6 +93,9 @@ public class interface_client extends AppCompatActivity{
         imprim = findViewById(R.id.imprimer);
         comm = findViewById(R.id.commercial);
         comm.setText(commercial);
+
+        check();
+
         update.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -170,7 +174,7 @@ public class interface_client extends AppCompatActivity{
     private void ShowStatus() {;
         montantInput.setVisibility(View.INVISIBLE);
         submitBtn.setVisibility(View.INVISIBLE);
-        attEdit.setText(montantInput.getText());
+        if(!montantInput.getText().toString().equals("")) attEdit.setText(montantInput.getText());
         rl.setVisibility(View.VISIBLE);
         db.collection("mvt").document(newMvtId).addSnapshotListener(new EventListener<DocumentSnapshot>() {
             @Override
@@ -203,7 +207,7 @@ public class interface_client extends AppCompatActivity{
         TextView societe = pdfTemplateView.findViewById(R.id.societe);
         TextView adresse = pdfTemplateView.findViewById(R.id.adresse);
         TextView matricule = pdfTemplateView.findViewById(R.id.matricule);
-
+        TextView clientTextView = pdfTemplateView.findViewById(R.id.clientTextView);
 
         db.collection("societe")
                 .limit(1)
@@ -214,15 +218,16 @@ public class interface_client extends AppCompatActivity{
                         Log.d("hmmm", "success");
                         if (task.isSuccessful()) {
                             Societe s = task.getResult().getDocuments().get(0).toObject(Societe.class);
-                            societe.setText(s.getNom());
-                            adresse.setText(s.getAdresse());
-                            matricule.setText(s.getAdresse());
+                            societe.setText("Societe: "+s.getNom());
+                            adresse.setText("Adresse: "+s.getAdresse());
+                            matricule.setText("Matricule Fiscal: "+s.getAdresse());
                         }
 
-                        idTextView.setText("ID: " + mvt.getId());
+                        idTextView.setText("Numero du ticket: " + mvt.getId());
                         montantTextView.setText("Montant: " + mvt.getMontant());
                         dateTextView.setText("Date: " + mvt.getDate());
                         commercialTextView.setText("Commercial: " + mvt.getCommercial());
+                        clientTextView.setText("Client: "+mvt.getNomClient());
 
                         if (ContextCompat.checkSelfPermission(interface_client.this, android.Manifest.permission.WRITE_EXTERNAL_STORAGE)
                                 != PackageManager.PERMISSION_GRANTED) {
@@ -303,5 +308,38 @@ public class interface_client extends AppCompatActivity{
         }
     }
 
+    public void check() {
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        String date = format.format(new Date()).substring(0,10);
+        db.collection("mvt")
+                .whereEqualTo("idClient", preferences.getString("id", ""))
+                .whereEqualTo("validation_commercial", false) // Assuming this is the correct field name
+                .whereEqualTo("commercial", commercial)
+                .whereEqualTo("date", date)
+                .limit(1)
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            QuerySnapshot querySnapshot = task.getResult();
+                            if (querySnapshot != null && !querySnapshot.isEmpty()) {
+                                DocumentSnapshot document = querySnapshot.getDocuments().get(0);
+                                mvt = document.toObject(MVT.class);
+                                newMvtId = document.getId();
+                                attEdit.setText(document.getLong("montant").toString());
+                                ShowStatus(); // Proceed with handling pending movements
+                            } else {
+                                Toast.makeText(interface_client.this, "ajouter un nouveau mouvment",Toast.LENGTH_SHORT ).show();
+                                // You can perform any necessary action here
+                            }
+                        } else {
+                            // Handle errors
+                            Log.e("CheckQuery", "Error getting pending movements: ", task.getException());
+                            Toast.makeText(interface_client.this, "Error: Unable to fetch pending movements", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+    }
 
 }

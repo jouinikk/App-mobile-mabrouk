@@ -68,11 +68,8 @@ public class MvtListActivity extends AppCompatActivity {
                             Toast.makeText(this, "empty list", Toast.LENGTH_LONG).show();
                         }else {
                             for (QueryDocumentSnapshot document : task.getResult()) {
-                                MVT mvt = new MVT();
+                                MVT mvt = document.toObject(MVT.class);
                                 mvt.setId(document.getId());
-                                mvt.setCommercial(document.getString("commercial"));
-                                mvt.setDate(document.getString("date"));
-                                mvt.setMontant(Integer.parseInt(String.valueOf(document.get("montant"))));
                                 mouvmnts.add(mvt);
                             }
                         }

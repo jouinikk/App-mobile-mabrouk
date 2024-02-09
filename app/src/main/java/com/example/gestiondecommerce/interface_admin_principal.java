@@ -31,17 +31,10 @@ public class interface_admin_principal extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_interface_admin_principal);
         Button btn1 = findViewById(R.id.button3);
-        Button btn2 = findViewById(R.id.button6);
         firestore = FirebaseFirestore.getInstance();
 
         btn1.setOnClickListener(view -> {
             Intent intent = new Intent(this, journal.class);
-            startActivity(intent);
-
-        });
-
-        btn2.setOnClickListener(view -> {
-            Intent intent = new Intent(this, Sign_up.class);
             startActivity(intent);
 
         });
@@ -53,7 +46,6 @@ public class interface_admin_principal extends AppCompatActivity {
                 Intent intent = new Intent(interface_admin_principal.this, ClientsListe.class);
                 intent.putExtra("from", "client");
                 startActivity(intent);
-
             }
         });
         Button showCommercials = findViewById(R.id.showCommercials);
@@ -63,7 +55,6 @@ public class interface_admin_principal extends AppCompatActivity {
                 Intent intent = new Intent(interface_admin_principal.this, ClientsListe.class);
                 intent.putExtra("from", "commercial");
                 startActivity(intent);
-
             }
         });
 

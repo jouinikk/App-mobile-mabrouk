@@ -9,6 +9,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -32,8 +34,16 @@ public class ClientsListe extends AppCompatActivity {
         setContentView(R.layout.activity_clients_liste);
         intent= getIntent();
         from = intent.getStringExtra("from");
-        Log.i("from", from);
         RecyclerView rv = findViewById(R.id.recycler);
+        Button add = findViewById(R.id.add);
+        add.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent1 = new Intent(ClientsListe.this,Sign_up.class);
+                intent1.putExtra("from", from);
+                startActivity(intent1);
+            }
+        });
         getUsers(from,new UsersCallback() {
             @Override
             public void onCallback(List<User> users) {

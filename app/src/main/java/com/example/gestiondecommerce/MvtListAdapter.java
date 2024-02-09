@@ -58,12 +58,14 @@ public class MvtListAdapter extends ArrayAdapter<MVT> {
         MVT currentMVT = getItem(position);
 
         TextView dateTextView = itemView.findViewById(R.id.dateTextView);
+        TextView montant = itemView.findViewById(R.id.montant);
         TextView commercialTextView = itemView.findViewById(R.id.commercialTextView);
         Button generatePdfButton = itemView.findViewById(R.id.generatePdfButton);
 
         if (currentMVT != null) {
             dateTextView.setText("Date: " + currentMVT.getDate());
             commercialTextView.setText("Commercial: " + currentMVT.getCommercial());
+            montant.setText("Montant: "+currentMVT.getMontant());
             id= currentMVT.getId();
             generatePdfButton.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -84,6 +86,7 @@ public class MvtListAdapter extends ArrayAdapter<MVT> {
         TextView montantTextView = pdfTemplateView.findViewById(R.id.montantTextView);
         TextView dateTextView = pdfTemplateView.findViewById(R.id.dateTextView);
         TextView commercialTextView = pdfTemplateView.findViewById(R.id.commercialTextView);
+        TextView clientTextView = pdfTemplateView.findViewById(R.id.clientTextView);
         TextView societe = pdfTemplateView.findViewById(R.id.societe);
         TextView adresse = pdfTemplateView.findViewById(R.id.adresse);
         TextView matricule = pdfTemplateView.findViewById(R.id.matricule);
@@ -100,10 +103,10 @@ public class MvtListAdapter extends ArrayAdapter<MVT> {
                             Societe s = task.getResult().getDocuments().get(0).toObject(Societe.class);
                             societe.setText("Sociéte: "+s.getNom());
                             adresse.setText("Adresse: "+s.getAdresse());
-                            matricule.setText("Matricule: "+s.getMatriculeFiscal());
+                            matricule.setText("Matricule Fiscal: "+s.getMatriculeFiscal());
                         }
-
-                        idTextView.setText("ID: " + mvt.getId());
+                        clientTextView.setText("Client: "+mvt.getNomClient());
+                        idTextView.setText("Numero du Ticket: " + mvt.getId());
                         montantTextView.setText("Montant: " + mvt.getMontant());
                         dateTextView.setText("Date: " + mvt.getDate());
                         commercialTextView.setText("Commercial: " + mvt.getCommercial());

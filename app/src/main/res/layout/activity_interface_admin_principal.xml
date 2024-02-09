@@ -17,26 +17,15 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
-        android:id="@+id/button6"
-        android:layout_width="396dp"
-        android:layout_height="60dp"
-        android:layout_marginTop="30dp"
-        android:text="Nouveau Client"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.466"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/button3" />
-
-    <Button
         android:id="@+id/btnShowUsers"
         android:layout_width="391dp"
         android:layout_height="57dp"
+        android:text="Clients"
         android:layout_marginTop="30dp"
-        android:text="Liste Clients"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.451"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/button6" />
+        app:layout_constraintTop_toBottomOf="@+id/button3" />
 
     <Button
         android:id="@+id/quit"
@@ -52,7 +41,7 @@
         android:layout_width="391dp"
         android:layout_height="57dp"
         android:layout_marginTop="30dp"
-        android:text="Liste Commercials"
+        android:text="Commerciaux"
         app:layout_constraintTop_toBottomOf="@+id/btnShowUsers"
         tools:layout_editor_absoluteX="7dp" />
 
@@ -61,7 +50,7 @@
         android:layout_width="391dp"
         android:layout_height="57dp"
         android:layout_marginTop="30dp"
-        android:text="Societe"
+        android:text="Parametre de Societe"
         app:layout_constraintTop_toBottomOf="@+id/showCommercials"
         tools:layout_editor_absoluteX="7dp" />
 

@@ -1,4 +1,5 @@
 package com.example.gestiondecommerce;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -15,6 +16,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
+
 import androidx.appcompat.widget.Toolbar;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -32,9 +34,9 @@ public class Sign_up extends AppCompatActivity {
 
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private EditText editTextEmail, editTextName, editTextTel, editTextPassword;
-    private Spinner spinnerRole;
     private Spinner spinnerUser;
     private Button btnRegister;
+    Intent i;
     private FirebaseAuth firebaseAuth;
     private FirebaseFirestore firestore;
 
@@ -50,7 +52,7 @@ public class Sign_up extends AppCompatActivity {
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        spinnerUser = findViewById(R.id.spinnerUser);
+        i = getIntent();
 
         firebaseAuth = FirebaseAuth.getInstance();
         firestore = FirebaseFirestore.getInstance();
@@ -59,50 +61,32 @@ public class Sign_up extends AppCompatActivity {
         editTextName = findViewById(R.id.editTextName);
         editTextTel = findViewById(R.id.editTextTel);
         editTextPassword = findViewById(R.id.editTextPassword);
-        spinnerRole = findViewById(R.id.spinnerRole);
         btnRegister = findViewById(R.id.btnRegister);
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(
-                this,
-                R.array.roles,
-                android.R.layout.simple_spinner_item
-        );
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinnerRole.setAdapter(adapter);
-
-        spinnerRole.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                if (spinnerRole.getSelectedItem().toString().equals("client")){
-                    getUsers("commercial", new UsersCallback() {
-                        @Override
-                        public void onCallback(List<User> users) {
-                            ArrayAdapter<User> userAdapter = new ArrayAdapter<>(Sign_up.this, android.R.layout.simple_spinner_item,users);
-                            userAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                            spinnerUser.setAdapter(userAdapter);
-                            spinnerUser.setVisibility(View.VISIBLE);
-                        }
-                    });
-
-                } else if (spinnerRole.getSelectedItem().toString().equals("commercial")) {
-                    getUsers("client", new UsersCallback() {
-                        @Override
-                        public void onCallback(List<User> users) {
-                            ArrayAdapter<User> userAdapter = new ArrayAdapter<>(Sign_up.this, android.R.layout.simple_spinner_item,users);
-                            userAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                            spinnerUser.setAdapter(userAdapter);
-                            spinnerUser.setVisibility(View.VISIBLE);
-                        }
-                    });
-                }else {
-                    spinnerUser.setVisibility(View.GONE);
+        spinnerUser = findViewById(R.id.spinnerUser);
+        if (i.getStringExtra("from").equals("client")) {
+            getUsers("commercial", new UsersCallback() {
+                @Override
+                public void onCallback(List<User> users) {
+                    ArrayAdapter<User> userAdapter = new ArrayAdapter<>(Sign_up.this, android.R.layout.simple_spinner_item, users);
+                    userAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                    spinnerUser.setAdapter(userAdapter);
+                    spinnerUser.setVisibility(View.VISIBLE);
                 }
-            }
+            });
 
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
+        } else{
+            getUsers("client", new UsersCallback() {
+                @Override
+                public void onCallback(List<User> users) {
+                    ArrayAdapter<User> userAdapter = new ArrayAdapter<>(Sign_up.this, android.R.layout.simple_spinner_item, users);
+                    userAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                    spinnerUser.setAdapter(userAdapter);
+                    spinnerUser.setVisibility(View.VISIBLE);
+                }
+            });
+        }
 
-            }
-        });
+
         btnRegister.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -128,12 +112,12 @@ public class Sign_up extends AppCompatActivity {
         String name = editTextName.getText().toString().trim();
         String telString = editTextTel.getText().toString().trim();
         String password = editTextPassword.getText().toString().trim();
-        String role = spinnerRole.getSelectedItem().toString();
+        String role = i.getStringExtra("from");
 
         ProgressDialog progressDialog = new ProgressDialog(Sign_up.this);
         progressDialog.setMessage("Ajout en cours...");
         progressDialog.show();
-        
+
         if (email.isEmpty() || !isValidEmail(email)) {
             Toast.makeText(this, "Veuillez saisir une adresse e-mail valide.", Toast.LENGTH_SHORT).show();
             return;
@@ -184,11 +168,11 @@ public class Sign_up extends AppCompatActivity {
         user.setName(name);
         user.setTel(tel);
         user.setRole(role);
-        if(role.equals("client")){
-            User com =(User)spinnerUser.getSelectedItem();
+        if (role.equals("client")) {
+            User com = (User) spinnerUser.getSelectedItem();
             user.setCommercialAffectee(com.getName());
-        } else if (role.equals("commercial")){
-            User cli =(User)spinnerUser.getSelectedItem();
+        } else if (role.equals("commercial")) {
+            User cli = (User) spinnerUser.getSelectedItem();
             user.setClientAffectee(cli.getName());
         }
         firestore.collection("User")
@@ -207,23 +191,25 @@ public class Sign_up extends AppCompatActivity {
                     }
                 });
     }
-    private boolean isValidEmail(CharSequence target){
+
+    private boolean isValidEmail(CharSequence target) {
         return !TextUtils.isEmpty(target) && Patterns.EMAIL_ADDRESS.matcher(target).matches();
     }
-    private void getUsers(String role,UsersCallback callback){
+
+    private void getUsers(String role, UsersCallback callback) {
         List<User> users = new ArrayList<>();
         db.collection("User").whereEqualTo("role", role)
                 .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>(){
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task){
-                        if(task.isSuccessful()){
-                            for(QueryDocumentSnapshot document:task.getResult()){
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
                                 users.add(document.toObject(User.class));
                             }
                             callback.onCallback(users);
-                        }else{
-                            Toast.makeText(Sign_up.this, "liste vide",Toast.LENGTH_SHORT);
+                        } else {
+                            Toast.makeText(Sign_up.this, "liste vide", Toast.LENGTH_SHORT);
                         }
                     }
                 });

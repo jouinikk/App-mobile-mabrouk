@@ -32,7 +32,14 @@ public class MainActivity extends AppCompatActivity {
         EditText mail=findViewById(R.id.mail);
         EditText password=findViewById(R.id.Password);
         Button btn=findViewById(R.id.btn);
-
+        Button out = findViewById(R.id.out);
+        out.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finishAffinity();
+                System.exit(0);
+            }
+        });
 
         btn.setOnClickListener(new View.OnClickListener() {
             @Override

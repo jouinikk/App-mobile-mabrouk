@@ -6,6 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ClientsListe">
+
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
@@ -13,7 +14,8 @@
         android:background="?attr/colorPrimary"
         android:elevation="4dp"
         android:layout_marginBottom="20dp"
-        android:theme="?attr/actionBarTheme" />
+        android:theme="?attr/actionBarTheme"
+       />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler"
@@ -22,4 +24,13 @@
         android:layout_marginTop="56dp"
         app:layout_constraintTop_toBottomOf="@+id/toolbar"
         tools:layout_editor_absoluteX="-4dp" />
+
+    <Button
+        android:id="@+id/add"
+        android:layout_width="wrap_content"
+        android:layout_height="50dp"
+        android:text="Ajouter"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar"
+        />
 </androidx.constraintlayout.widget.ConstraintLayout>

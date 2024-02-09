@@ -3,7 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:id="@+id/menu_show_users"
-        android:title="Afficher les utilisateurs"
-        app:showAsAction="never" />
+        android:id="@+id/action_custom_button"
+        android:title="Custom Button"
+        app:showAsAction="always"
+        app:icon="@drawable/add_foreground" /> <!-- Replace ic_custom_button with your button icon -->
 </menu>
