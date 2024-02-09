@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <Button
+        android:id="@+id/client"
+        android:layout_width="393dp"
+        android:layout_height="53dp"
+        android:layout_marginTop="160dp"
+        android:text="Clients"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/quitter"
+        android:layout_width="391dp"
+        android:layout_height="57dp"
+        android:layout_marginBottom="224dp"
+        android:text="Quitter"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/Admins"
+        app:layout_constraintVertical_bias="0.65"
+        tools:layout_editor_absoluteX="4dp" />
+
+    <Button
+        android:id="@+id/Commerciaux"
+        android:layout_width="391dp"
+        android:layout_height="57dp"
+        android:layout_marginTop="32dp"
+        android:text="Commerciaux"
+        app:layout_constraintTop_toBottomOf="@+id/client"
+        tools:layout_editor_absoluteX="10dp" />
+
+    <Button
+        android:id="@+id/Admins"
+        android:layout_width="391dp"
+        android:layout_height="57dp"
+        android:layout_marginTop="28dp"
+        android:text="Admins"
+        app:layout_constraintTop_toBottomOf="@+id/Commerciaux"
+        tools:layout_editor_absoluteX="10dp" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
